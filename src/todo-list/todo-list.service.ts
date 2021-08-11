@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Todo } from './todo-list.entity';
-import { Repository , UpdateResult, DeleteResult } from 'typeorm';
+import { Repository, UpdateResult, DeleteResult } from 'typeorm';
 @Injectable()
 export class TodoListService {
   constructor(
     @InjectRepository(Todo)
     private todoRepository: Repository<Todo>,
-  ) {
-  }
+  ) {}
 
   async findAll(): Promise<Todo[]> {
     return await this.todoRepository.find();

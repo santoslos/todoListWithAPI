@@ -3,7 +3,7 @@ import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 
 export class UpdateResponse {
   @ApiProperty()
-  raw: any;
+  raw: any[];
 
   @ApiProperty()
   affected?: number;
