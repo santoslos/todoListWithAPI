@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Todo } from './todo-list.entity';
 import { Repository, UpdateResult, DeleteResult } from 'typeorm';
+import { CreateTodo } from './todo-list.controller';
 @Injectable()
 export class TodoListService {
   constructor(
@@ -13,7 +14,7 @@ export class TodoListService {
     return await this.todoRepository.find();
   }
 
-  async create(todo: Todo): Promise<Todo> {
+  async create(todo: CreateTodo): Promise<CreateTodo> {
     return await this.todoRepository.save(todo);
   }
 
