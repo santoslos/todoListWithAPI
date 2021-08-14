@@ -10,7 +10,7 @@ const password = process.env.POSTGRES_PASSWORD || 'example';
     TodoModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'postgresql',
       port: 5432,
       username,
       password,
