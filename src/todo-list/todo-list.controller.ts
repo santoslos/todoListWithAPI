@@ -3,10 +3,10 @@ import { TodoListService } from './todo-list.service';
 import { Todo } from './todo-list.entity';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import { UpdateResponse } from '../classes/updateResponse';
-import { DeleteResponse } from '../classes/deleteResponse';
+import { UpdateResponse } from './types/UpdateResponse';
+import { DeleteResponse } from './types/DeleteResponse';
+import {newTodo} from './types/newTodo';
 
-export type CreateTodo = Omit<Todo, 'id'>;
 
 @ApiTags('todo-list')
 @Controller('todo-list')
@@ -16,14 +16,14 @@ export class TodoListController {
   @Get()
   @ApiOperation({ description: 'Find All' })
   @ApiResponse({ status: 200, description: 'Objects returned.', type: [Todo] })
-  @ApiResponse({ status: 400, description: 'Validation failed.' })
+  @ApiResponse({ status: 404, description: 'page not found' })
   index(): Promise<Todo[]> {
     return this.todoListService.findAll();
   }
 
   @Post('')
   @ApiResponse({ status: 201, description: 'The record has been successfully created.', type: Todo })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 400, description: 'Validation failed.' })
   @ApiBody({
     schema: {
       type: 'object',
@@ -34,7 +34,7 @@ export class TodoListController {
       },
     },
   })
-  async create(@Body() todoData: CreateTodo): Promise<CreateTodo> {
+  async create(@Body() todoData: newTodo): Promise<newTodo> {
     return this.todoListService.create(todoData);
   }
 
@@ -43,9 +43,8 @@ export class TodoListController {
   @ApiResponse({ status: 200, description: 'Post updated.', type: UpdateResponse })
   @ApiResponse({ status: 400, description: 'Validation failed.' })
   @ApiResponse({ status: 404, description: 'Post not found.' })
-  async update(@Param('id') id: number, @Body() todoData: Todo): Promise<UpdateResult> {
-    todoData.id = Number(id);
-    return this.todoListService.update(todoData);
+  async update(@Param('id') id: number, @Body() newTodo: newTodo): Promise<UpdateResult> {
+    return this.todoListService.update(id, newTodo);
   }
 
   @Delete('/:id')

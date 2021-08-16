@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Todo } from './todo-list.entity';
 import { Repository, UpdateResult, DeleteResult } from 'typeorm';
-import { CreateTodo } from './todo-list.controller';
+import {newTodo} from './types/newTodo';
 @Injectable()
 export class TodoListService {
   constructor(
@@ -14,12 +14,12 @@ export class TodoListService {
     return await this.todoRepository.find();
   }
 
-  async create(todo: CreateTodo): Promise<CreateTodo> {
+  async create(todo: newTodo): Promise<newTodo> {
     return await this.todoRepository.save(todo);
   }
 
-  async update(todo: Todo): Promise<UpdateResult> {
-    return await this.todoRepository.update(todo.id, todo);
+  async update(id:number, newTodo: newTodo): Promise<UpdateResult> {
+    return await this.todoRepository.update(id, newTodo);
   }
 
   async delete(id: number): Promise<DeleteResult> {
