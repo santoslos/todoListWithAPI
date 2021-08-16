@@ -1,0 +1,45 @@
+version: '3.1'
+
+services:
+  dev:
+    container_name: nestjs_api_dev
+    image: nestjs-api-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start
+    depends_on:
+      - db
+    links:
+      - db:db
+    ports:
+      - 3000:3000
+      - 9229:9229
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    networks:
+      - webnet
+  db:
+    image: postgres:11.2
+    container_name: postgresql
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ../postgres:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    ports:
+      - 5432:5432
+    networks:
+      - webnet
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+networks:
+  webnet:
